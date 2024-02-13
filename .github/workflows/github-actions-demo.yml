@@ -1,9 +1,11 @@
 name: GitHub Actions Demo
-run-name: Tests before push
+run-name: Unit tests before push
 on: [push]
 jobs:
   front_end_tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Display greeting
-        run: echo "hello"
+      - name: Unit tests
+        run: echo "Running unit tests"
+      - name: Run unit tests
+        run: npm run test:unit
