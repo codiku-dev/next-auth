@@ -44,5 +44,8 @@ export const POST = safeEndPoint(
         { status: StatusCodes.BAD_REQUEST }
       );
     }
-
-  }, false, FORGOT_PASSWORD_MODEL)
+  },
+  false,
+  undefined,
+  FORGOT_PASSWORD_MODEL
+);

@@ -4,9 +4,20 @@ import { z } from "zod";
 export const JWT_TOKEN_MODEL = z
   .string()
   .min(1)
-  .refine((value) => decodeJwtToken(value) !== null, {
-    message: "Invalid JWT token",
-  });
+  .refine(
+    (value) => {
+      try {
+        console.log("REFINE TEST");
+        return decodeJwtToken<string>(value) !== null;
+      } catch (e) {
+        console.log("REFINE FAIL");
+        return false;
+      }
+    },
+    {
+      message: "Invalid JWT token",
+    }
+  );
 
 export const PASSWORD_MODEL = z
   .string()
@@ -16,7 +27,10 @@ export const PASSWORD_MODEL = z
   .regex(/[0-9]+/, "At least 1 number")
   .regex(/[!@#$%^&*()_+[\]{};':"\\|,.<>/?]+/, "At least 1 special character");
 
-export const EMAIL_MODEL = z.string().email("Invalid email").min(1, "Email is required");
+export const EMAIL_MODEL = z
+  .string()
+  .email("Invalid email")
+  .min(1, "Email is required");
 
 export const STRING_REQUIRED_MODEL = z.string().min(1, "Required");
 

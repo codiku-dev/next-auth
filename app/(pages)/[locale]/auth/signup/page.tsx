@@ -21,8 +21,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { Divider } from "@/components/ui/divider";
 import { FieldPassword } from "@/components/ui/field-password";
-import { useTranslations } from "use-intl";
-import ky from "ky";
+import { useTranslations } from "next-intl";
 import { UnsensitiveUser } from "@/types/user";
 import { api } from "@/configs/ky-config";
 
@@ -48,10 +47,10 @@ try {
 
 export default function Signup() {
   const [isEmailSent, setIsEmailSent] = useState(false);
+  const t = useTranslations("Auth.signup");
   const formDataRef = useRef<Form>();
   const [disabledEmailButton, setDisabledEmailButton] = useState(false);
   const [currentZodIssues, setCurrentZodIssues] = useState<ZodIssue[]>([]);
-  const t = useTranslations("Auth.signup");
   const { mutate: signup, isPending } = useMutation({
     mutationFn: async (formValues: Form) =>
       api

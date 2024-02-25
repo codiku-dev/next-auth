@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const PATCH = safeEndPoint(
   async (req: NextRequest, _, { newPassword, oldPassword }, __, token) => {
-
     const user = await db.user.findUnique({
       where: { email: token!.email! },
     });
@@ -52,5 +51,6 @@ export const PATCH = safeEndPoint(
     }
   },
   false,
+  undefined,
   UPDATE_PASSWORD_MODEL
 );

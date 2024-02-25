@@ -10,13 +10,17 @@ interface BodyParams {
   [key: string]: string;
 }
 
-// Just made is async so it has the same signature as
-export function getQueryParams(req: NextRequest) {
-  const queryParams = new URL(req.url).searchParams;
+export function getQueryParams(request: NextRequest) {
   const queryParamsObject: QueryParams = {};
-  queryParams.forEach((value, key) => {
-    queryParamsObject[key] = value;
-  });
+  if (request?.nextUrl) {
+    // Force to parse and stringify, if you remove it... error at build time...
+    const url = new URL(JSON.parse(JSON.stringify(request.nextUrl)));
+    if (url && typeof url !== "string" && url.searchParams) {
+      url.searchParams.forEach((value: string, key: string) => {
+        queryParamsObject[key] = value;
+      });
+    }
+  }
 
   return queryParamsObject;
 }

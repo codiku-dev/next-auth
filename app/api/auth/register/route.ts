@@ -49,6 +49,7 @@ export const POST = safeEndPoint(
     }
   },
   false,
+  undefined,
   REGISTER_MODEL
 );
 

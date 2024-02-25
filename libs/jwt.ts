@@ -15,13 +15,14 @@ export function generateJwtToken(data: string | object | Buffer) {
 export function decodeJwtToken<T>(token: string) {
   try {
     // Verify the token using the secret key
-    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET as string);
+    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET);
     return decoded as T;
   } catch (error) {
     // Token verification failed
     return null;
   }
 }
+
 // Create a function that wraps your route handler with the authentication logic.
 export function safeEndPoint<B, P, UriP>(
   routeHandler: (
@@ -65,15 +66,22 @@ export function safeEndPoint<B, P, UriP>(
     } else {
       try {
         let body = modelBody ? await parseBody(req, modelBody) : undefined;
-        const params = getQueryParams(req);
+        const qParams = getQueryParams(req);
 
-        if (modelUriParams) {
+        if (modelUriParams !== undefined && route?.params) {
           modelUriParams.parse(route.params);
         }
-        if (modelQueryParams) {
-          modelQueryParams.parse(params);
+        let parseParamsSuccess;
+        if (modelQueryParams && qParams) {
+          parseParamsSuccess = await modelQueryParams.safeParseAsync(qParams);
         }
-        return routeHandler(req, route, body as never, params as P, undefined);
+        return routeHandler(
+          req,
+          route,
+          body as never,
+          parseParamsSuccess ? (qParams as P) : ({} as P),
+          undefined
+        );
       } catch (error) {
         return NextResponse.json(errorResponse(error as Error), {
           status: 400,

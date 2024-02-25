@@ -7,14 +7,15 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   moduleNameMapper: {
     "^.+\\.(css|less|scss)$": "identity-obj-proxy",
     uuid: require.resolve("uuid"),
+    "react-dom/server": "<rootDir>/node_modules/react-dom/server.browser.js",
   },
   testEnvironmentOptions: {
     customExportConditions: [], // don't load "browser" field

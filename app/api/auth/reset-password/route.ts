@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const PATCH = safeEndPoint(
   async (req: NextRequest, _, { password, token }) => {
-
     const data = decodeJwtToken<{ email: string }>(token);
     if (data?.email) {
       const user = await db.user.findUnique({ where: { email: data?.email } });
@@ -49,5 +48,8 @@ export const PATCH = safeEndPoint(
       { message: "Error during password reset", error: true },
       { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
-
-  }, false, RESET_PASSWORD_MODEL)
+  },
+  false,
+  undefined,
+  RESET_PASSWORD_MODEL
+);

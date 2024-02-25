@@ -1,24 +1,28 @@
-name: Build and Test React Application
-
+name: Run front end tests
 on:
   push:
     branches: [dev, main]
   pull_request:
     branches: [dev, main]
-
 jobs:
   build_test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
-
+        node-version: [20]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: run test
-        run: npm run test:unit
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run unit tests
+        run: pnpm run test:unit
+      - name: Run integration tests
+        run: pnpm run test:integration
