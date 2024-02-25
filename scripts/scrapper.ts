@@ -1,4 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { chromium } from "playwright";
 import { writeFileSync } from "fs";
 import path from "path";

@@ -67,17 +67,17 @@ export function safeAction<R>(
 
 export function safeAction<D, R>(
   serverAction: (data: D) => Promise<R>,
-  modelData: ZodSchema<D>
+  modalArgs: ZodSchema<D>
 ): (data: D) => Promise<R | ErrorResponseAction>;
 
 export function safeAction<D, R>(
   serverAction: (data: D) => Promise<R>,
-  modelData?: ZodSchema<D>
+  modalArgs?: ZodSchema<D>
 ) {
-  if (modelData !== undefined) {
+  if (modalArgs !== undefined) {
     return async (d: D) => {
       try {
-        await modelData.parse(d);
+        await modalArgs.parse(d);
         return await (serverAction as (data: D) => Promise<R>)(d);
       } catch (error) {
         throw new Error(errorResponseAction(error as Error).message);
